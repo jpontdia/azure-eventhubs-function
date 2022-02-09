@@ -1,5 +1,5 @@
 # azure-eventhubs
-*Microsoft Azure Functions connecting to Azure Event Hubs demo with Spring Boot 2.6*
+*Microsoft Azure Functions connecting to Azure Event Hubs demo with Spring Boot 2.5.4*
 
 ## Table of contents
 1. [Objectives](#Objectives)
