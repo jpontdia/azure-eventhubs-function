@@ -20,8 +20,8 @@
 
 ## Environment variables
 The application requires the next environment variables:
-* EVENTHUBS_NAMESPACE. The management container for event hubs (or topics, in Kafka parlance).
-* AZUREWEBJOBSSTORAGE. The Azure Storage Account used to save the pointer to the latest message read.
+* EVENTHUBS_CONNECTION. The Event Hub Connection String contains the Namespace Name and the Shared Access Signature (SAS) authentication information.
+* AZUREWEBJOBSSTORAGE. The Azure Storage Account needed to save the pointer to the latest message read.
 
 Example:
 ~~~bash
@@ -87,5 +87,6 @@ For detailed output, run func with --verbose flag.
 Send messages to the event hub using the demo application: [Azure EventHubs demo](https://github.com/jpontdia/azure-eventhubs)
 
 ## Recommended content
+* [Get an Event Hubs connection string](https://docs.microsoft.com/en-us/azure/event-hubs/event-hubs-get-connection-string)
 * [Integrate Event Hubs with serverless functions on Azure](https://docs.microsoft.com/en-us/azure/architecture/serverless/event-hubs-functions/event-hubs-functions)
 * [Explore Azure Event Hubs with GUI](https://medium.com/@sriharip316/explore-azure-event-hubs-with-gui-2501ed278d4)
