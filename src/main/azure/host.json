@@ -1,0 +1,37 @@
+{
+  "version": "2.0",
+  "extensions": {
+    "eventHubs": {
+      "batchCheckpointFrequency": 1,
+      "eventProcessorOptions": {
+        "maxBatchSize": 10,
+        "prefetchCount": 300
+      },
+      "initialOffsetOptions": {
+        "type": "fromStart",
+        "enqueuedTimeUtc": ""
+      }
+    }
+  },
+  "extensionBundle": {
+    "id": "Microsoft.Azure.Functions.ExtensionBundle",
+    "version": "[1.*, 2.0.0)"
+  },
+  "functionTimeout": "00:10:00",
+  "logging": {
+    "applicationInsights": {
+      "samplingSettings": {
+        "isEnabled": true
+      }
+    },
+
+    "fileLoggingMode": "always",
+    "logLevel": {
+      "default": "Information",
+      "Host.Results": "None",
+      "Function": "Information",
+      "Function.loggingProcessor": "Information",
+      "Host.Aggregator": "None"
+    }
+  }
+}

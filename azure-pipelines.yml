@@ -1,0 +1,43 @@
+variables:
+  # The name of your functionApp is what you provided as stagingDirectory in pom.xml
+  functionAppName: funcapp-eventhubs-demo
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    codeCoverageToolOption: 'jaCoCo'
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: '-DskipTests clean package '
+
+- task: CopyFiles@2
+  displayName: Copy Files
+  inputs:
+    SourceFolder: $(system.defaultworkingdirectory)
+    Contents: '**'
+    TargetFolder: $(build.artifactstagingdirectory)
+
+- task: ArchiveFiles@2
+  displayName: 'Archive $(build.artifactstagingdirectory)/target/azure-functions/$(functionAppName)'
+  inputs:
+    rootFolderOrFile: '$(build.artifactstagingdirectory)/target/azure-functions/$(functionAppName)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.artifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact
+  inputs:
+    PathtoPublish: $(Build.artifactStagingDirectory)/$(Build.BuildId).zip

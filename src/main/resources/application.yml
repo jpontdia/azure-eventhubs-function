@@ -1,0 +1,21 @@
+server:
+  port: 8090
+  error:
+    include-message: always
+
+logging:
+  level:
+    root: INFO
+    com:
+      demo: DEBUG
+    sql: DEBUG
+    org:
+      springframework:
+        cloud:
+          function:
+            utils:
+              FunctionClassUtils: ERROR
+
+spring:
+  profiles:
+    active: local
