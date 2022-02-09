@@ -9,7 +9,7 @@
 6. [Recommended content](#recommended-content)
 
 ## Objectives
-1. Receive messages from Azure Event Hubs using Azure Functions framework and Spring Boot 2.6.
+1. Receive messages from Azure Event Hubs using Azure Functions framework and Spring Boot
 
 ## Prerequisites
 * An Azure subscription
