@@ -15,15 +15,15 @@ public class LoggingProcessorHandler extends FunctionInvoker<String, Boolean>{
             @EventHubTrigger(
                     name = "message",
                     dataType = "string",
-                    eventHubName  = "logs",
+                    eventHubName  = "appservice-logs",
                     connection = "EVENTHUBS_CONNECTION"
             )
-            List<String> message,
+                    List<String> message,
             final ExecutionContext executionContext) {
-            executionContext.getLogger().info("Handler message size: " + message.size());
-            message.forEach(item ->
-                    handleRequest(item, executionContext)
-                    //executionContext.getLogger().info("Message payload: " + item)
-            );
+        //executionContext.getLogger().info("Handler message size: " + message.size());
+        message.forEach(item ->
+                        handleRequest(item, executionContext)
+                //executionContext.getLogger().info("Message payload: " + item)
+        );
     }
 }

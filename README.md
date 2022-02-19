@@ -17,11 +17,13 @@
 * Apache Maven, version 3.8 or later.
 * An Event Hubs standard instance.
 * A Storage Account
+* Azurite.  Emulator for local Azure Storage development [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio)
 
 ## Environment variables
 The application requires the next environment variables:
 * EVENTHUBS_CONNECTION. The Event Hub Connection String contains the Namespace Name and the Shared Access Signature (SAS) authentication information.
-* AZUREWEBJOBSSTORAGE. The Azure Storage Account needed to save the pointer to the latest message read.
+* AZUREWEBJOBSSTORAGE. The Azure Storage Account needed to save the pointer
+  to the latest message read. For local development install [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio)
 
 Example:
 ~~~bash
@@ -30,7 +32,26 @@ set AZUREWEBJOBSSTORAGE=DefaultEndpointsProtocol=https;AccountName=my-storagea-a
 ~~~
 
 ## Build and test the application
+Open a windows console and set your directory to the root folder of your project
 
+Run Azurite:
+```bash
+azurite --blobHost 127.0.0.1
+```
+Result:
+```bash
+....
+....
+Azurite Blob service is starting at http://127.0.0.1:10000
+Azurite Blob service is successfully listening at http://127.0.0.1:10000
+Azurite Queue service is starting at http://127.0.0.1:10001
+Azurite Queue service is successfully listening at http://127.0.0.1:10001
+Azurite Table service is starting at http://127.0.0.1:10002
+Azurite Table service is successfully listening at http://127.0.0.1:10002
+```
+
+Open another window console and set your directory to the root folder of
+your project:
 Run the application:
 ```bash
 mvn clean package -DskipTests azure-functions:run

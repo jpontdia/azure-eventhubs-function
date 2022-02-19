@@ -1,55 +1,62 @@
 variables:
   # The name of your functionApp is what you provided as stagingDirectory in pom.xml
-  functionAppName: funcapp-eventhubs-demo
+  functionAppName: azure-eventhubs-function
 
 trigger:
   - develop
   - main
 
-pool:
-  vmImage: DevLinuxPool
+jobs:
+  - job: Job_1
+    displayName: Agent job 1
+    pool:
+      name: DevLinuxPool
 
-steps:
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: |
-      curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-      sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
-      sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-$(lsb_release -cs)-prod $(lsb_release -cs) main" > /etc/apt/sources.list.d/dotnetdev.list'
-      sudo apt-get update
-      sudo apt-get update
-      sudo apt-get install azure-functions-core-tools-4
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    codeCoverageToolOption: 'jaCoCo'
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'clean package '
-    options: '--batch-mode'
+    steps:
+      - checkout: self
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: |
+            curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+            sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+            sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-$(lsb_release -cs)-prod $(lsb_release -cs) main" > /etc/apt/sources.list.d/dotnetdev.list'
+            sudo apt-get update
+            sudo apt-get update
+            sudo apt-get install azure-functions-core-tools-4
+      - task: Maven@3
+        inputs:
+          mavenPomFile: 'pom.xml'
+          mavenOptions: '-Xmx3072m'
+          jdkArchitectureOption: 'x64'
+          publishJUnitResults: true
+          codeCoverageToolOption: 'jaCoCo'
+          testResultsFiles: '**/surefire-reports/TEST-*.xml'
+          goals: 'clean package '
 
-- task: CopyFiles@2
-  displayName: Copy Files
-  inputs:
-    SourceFolder: $(system.defaultworkingdirectory)
-    Contents: '**'
-    TargetFolder: $(build.artifactstagingdirectory)
+      - task: PublishPipelineArtifact@1
+        displayName: Publish Pipeline Artifact
+        inputs:
+          path: $(System.DefaultWorkingDirectory)
+          artifactName: TestPublish
 
-- task: ArchiveFiles@2
-  displayName: 'Archive $(build.artifactstagingdirectory)/target/azure-functions/$(functionAppName)'
-  inputs:
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/target/azure-functions/$(functionAppName)'
-    includeRootFolder: false
-    archiveType: 'zip'
-    archiveFile: '$(Build.artifactStagingDirectory)/$(Build.BuildId).zip'
-    replaceExistingArchive: true
+      - task: CopyFiles@2
+        displayName: Copy Files
+        inputs:
+          SourceFolder: $(system.defaultworkingdirectory)
+          Contents: '**'
+          TargetFolder: $(build.artifactstagingdirectory)
 
-- task: PublishBuildArtifacts@1
-  displayName: Publish Artifact
-  inputs:
-    PathtoPublish: $(Build.artifactStagingDirectory)/$(Build.BuildId).zip
+      - task: ArchiveFiles@2
+        displayName: 'Archive $(build.artifactstagingdirectory)/target/azure-functions/$(functionAppName)'
+        inputs:
+          rootFolderOrFile: '$(build.artifactstagingdirectory)/target/azure-functions/$(functionAppName)'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.artifactStagingDirectory)/$(Build.BuildId)/app.zip'
+          replaceExistingArchive: true
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publish Artifact
+        inputs:
+          PathtoPublish: $(Build.artifactStagingDirectory)/$(Build.BuildId)/app.zip
