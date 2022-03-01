@@ -6,7 +6,7 @@
 2. [Prerequisites](#prerequisites)
 3. [Environment variables](#environment-variables)
 4. [Build and test the application](#build-and-test-the-application)
-6. [Recommended content](#recommended-content)
+5. [Recommended content](#recommended-content)
 
 ## Objectives
 1. Receive messages from Azure Event Hubs using Azure Functions framework and Spring Boot
